@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(grep -E \"\\\\.\\(xml|sql|json|js|ts\\)$\")",
-      "Bash(xargs ls)"
-    ]
-  }
-}
