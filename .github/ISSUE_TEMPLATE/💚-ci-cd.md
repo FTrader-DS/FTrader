@@ -1,20 +1,18 @@
 ---
-name: "\U0001F49A CI/CD"
-about: 배포 작업 템플릿입니다.
-title: "\U0001F49A ci/cd: "
-labels: ci/cd
+name: "💚 CI/CD"
+about: 배포 및 환경 설정 이슈입니다.
+title: "💚 chore: "
+labels: chore
 assignees: ''
-
 ---
 
-# Title
+## 📌 개요
+> 어떤 설정/배포 작업인지 설명해주세요.
+- 
 
-- 자세한 개요 작성
+## ✅ TODO
+- [ ] 
+- [ ] 
 
-# TODO
-
-- [ ] 투두 내용 작성
-
-# etc
-
-- 참고자료 등 기타 내용 작성
+## 📎 참고 자료
+> 관련 문서, 링크 등을 작성해주세요. (없으면 삭제)
