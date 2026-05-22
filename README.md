@@ -138,12 +138,12 @@ Swagger UI: `http://localhost:8080/swagger-ui.html`
 
 ## 🌿 브랜치 전략
 
-두 명이 기능을 동시에 개발하므로 `develop` 브랜치를 통합 검증 공간으로 사용합니다.
-기능 브랜치들은 `develop`으로 먼저 합쳐서 함께 테스트한 뒤, `main`으로 올립니다.
+두 명이 기능을 동시에 개발하므로 `dev` 브랜치를 통합 검증 공간으로 사용합니다.
+기능 브랜치들은 `dev`으로 먼저 합쳐서 함께 테스트한 뒤, `main`으로 올립니다.
 
 ```
 main                    # 배포 브랜치 — Ruleset으로 직접 push 금지
-└── develop             # 통합 브랜치 — 기능 합쳐서 같이 테스트하는 공간
+└── dev                # 통합 브랜치 — 기능 합쳐서 같이 테스트하는 공간
     ├── feat/기능명      # 새 기능 개발
     ├── fix/버그명       # 버그 수정
     ├── refactor/내용   # 리팩터링 (기능 변화 없음)
@@ -162,11 +162,11 @@ main                    # 배포 브랜치 — Ruleset으로 직접 push 금지
 ### 작업 흐름
 
 ```
-feat/기능명 ──PR──▶ develop ──테스트 완료 후 PR──▶ main
+feat/기능명 ──PR──▶ dev ──테스트 완료 후 PR──▶ main
 ```
 
 ```bash
-# 1. develop 최신화 후 작업 브랜치 생성
+# 1. dev 최신화 후 작업 브랜치 생성
 git checkout dev
 git pull origin dev
 git checkout -b feat/기능명
@@ -178,32 +178,15 @@ git commit -m "feat: 오늘의 용어 API 추가"
 # 3. 원격 push
 git push origin feat/기능명
 
-# 4. GitHub에서 develop 으로 PR 생성 → 상대방 Approve → merge
-# 5. 두 기능 모두 develop에 합쳐지면 → develop → main PR 생성
+# 4. GitHub에서 dev 으로 PR 생성 → 상대방 Approve → merge
+# 5. 두 기능 모두 dev에 합쳐지면 → dev → main PR 생성
 ```
-
-### main 직접 push 방지 설정
-
-GitHub **무료 플랜 + 비공개 레포**에서는 **Repository Rulesets**으로 설정합니다.
-(Settings → Rules → Rulesets → New branch ruleset)
-
-| 항목 | 설정값 |
-|---|---|
-| Target branches | `main` |
-| Restrict deletions | ✅ |
-| Require a pull request before merging | ✅ |
-| └ Required approvals | `1` |
-| Block force pushes | ✅ |
-
 ---
 
 ## 📝 커밋 메시지 규칙
 
 ```
 타입: 한 줄 요약 (50자 이내)
-
-- 상세 내용 1 (선택)
-- 상세 내용 2 (선택)
 ```
 
 ### 타입 목록
@@ -221,10 +204,6 @@ GitHub **무료 플랜 + 비공개 레포**에서는 **Repository Rulesets**으�
 
 ```bash
 feat: 오늘의 용어 API 및 홈 화면 카드 추가
-
-- GET /api/vocabulary/today 엔드포인트 구현
-- HomeView에 오늘의 용어 카드 컴포넌트 추가
-- 단어장 저장 버튼 연동
 ```
 
 ```bash
@@ -243,22 +222,6 @@ fix: Docker MySQL 포트 충돌 수정
 - **제목 형식**: `[타입] 작업 내용 요약`
     - 예: `[feat] 오늘의 용어 API 추가`, `[fix] 로그인 오류 수정`
 - **PR 크기**: 하나의 PR은 하나의 기능 또는 하나의 버그 수정
-
-### PR 본문 템플릿
-
-```markdown
-## 작업 내용
-- 구현하거나 수정한 내용을 간략히 작성
-
-## 변경 파일
-- `경로/파일명.java` — 변경 이유
-
-## 테스트 방법
-- 로컬에서 확인한 방법 작성
-
-## 참고 사항
-- 리뷰어가 알아야 할 특이사항 (없으면 생략)
-```
 
 ### 리뷰 규칙
 
