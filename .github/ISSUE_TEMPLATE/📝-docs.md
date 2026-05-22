@@ -1,13 +1,13 @@
 ---
-name: "✅ TEST"
-about: 테스트 작성 이슈입니다.
-title: "✅ test: "
-labels: test
+name: "📝 DOCS"
+about: 문서 작업 이슈입니다.
+title: "📝 docs: "
+labels: docs
 assignees: ''
 ---
 
 ## 📌 개요
-> 어떤 테스트를 작성할지 설명해주세요.
+> 어떤 문서를 작성/수정할지 설명해주세요.
 - 
 
 ## ✅ TODO
