@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ftrader.user.UserMapper">
+
+    <select id="findByKakaoId" resultType="com.ftrader.user.User">
+        SELECT user_id, kakao_id, nickname, profile_img, created_at, updated_at
+        FROM users
+        WHERE kakao_id = #{kakaoId}
+    </select>
+
+    <select id="findById" resultType="com.ftrader.user.User">
+        SELECT user_id, kakao_id, nickname, profile_img, created_at, updated_at
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="userId">
+        INSERT INTO users (kakao_id, nickname, profile_img)
+        VALUES (#{kakaoId}, #{nickname}, #{profileImg})
+    </insert>
+
+    <insert id="insertUserLevel">
+        INSERT INTO user_level (user_id)
+        VALUES (#{userId})
+    </insert>
+
+    <!--
+        스트릭 갱신 — 오늘 첫 제출 시에만 실행
+          어제 출석 → streak + 1 (연속 유지)
+          그 외     → streak = 1 (끊김 또는 첫 출석)
+        last_attend_dt = CURDATE()이면 WHERE 조건 불일치 → UPDATE 0행 → 스킵
+    -->
+    <update id="updateStreak">
+        UPDATE user_level
+        SET streak         = CASE
+                                 WHEN last_attend_dt = DATE_SUB(CURDATE(), INTERVAL 1 DAY) THEN streak + 1
+                                 ELSE 1
+                             END,
+            last_attend_dt = CURDATE()
+        WHERE user_id = #{userId}
+          AND (last_attend_dt IS NULL OR last_attend_dt &lt; CURDATE())
+    </update>
+
+    <select id="findStreak" resultType="int">
+        SELECT streak FROM user_level WHERE user_id = #{userId}
+    </select>
+
+    <!-- 내 정보 + 레벨 + 풀이 통계 한 번에 조회 -->
+    <select id="findUserInfo" resultType="com.ftrader.user.dto.UserInfoResponse">
+        SELECT u.user_id,
+               u.nickname,
+               u.profile_img,
+               ul.points,
+               ul.level,
+               ul.streak,
+               COUNT(qr.result_id)                                          AS total_solved,
+               SUM(CASE WHEN qr.is_correct = TRUE THEN 1 ELSE 0 END)       AS correct_count
+        FROM users u
+        LEFT JOIN user_level  ul ON u.user_id = ul.user_id
+        LEFT JOIN quiz_result qr ON u.user_id = qr.user_id
+        WHERE u.user_id = #{userId}
+        GROUP BY u.user_id, u.nickname, u.profile_img,
+                 ul.points, ul.level, ul.streak
+    </select>
+
+</mapper>

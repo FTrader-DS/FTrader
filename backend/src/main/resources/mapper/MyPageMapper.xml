@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ftrader.mypage.MyPageMapper">
+
+    <!-- ── 오답노트 ──────────────────────────────────────────── -->
+
+    <!-- 오답 목록 — 최신순, 사용자가 선택한 답 + 정답 텍스트 함께 반환 -->
+    <select id="findWrongAnswers" resultType="com.ftrader.mypage.dto.WrongAnswerItem">
+        SELECT qr.result_id,
+               q.quiz_id,
+               q.quiz_type,
+               q.difficulty,
+               s.name        AS sector_name,
+               q.question,
+               sel.content   AS selected_content,
+               cor.content   AS correct_content,
+               q.explanation,
+               qr.solved_at
+        FROM quiz_result qr
+        JOIN quiz        q   ON qr.quiz_id            = q.quiz_id
+        JOIN sector      s   ON q.sector_id            = s.sector_id
+        JOIN quiz_choice sel ON qr.selected_choice_id  = sel.choice_id
+        JOIN quiz_choice cor ON cor.quiz_id             = q.quiz_id
+                            AND cor.is_correct          = TRUE
+        WHERE qr.user_id   = #{userId}
+          AND qr.is_correct = FALSE
+        ORDER BY qr.solved_at DESC
+    </select>
+
+    <!-- 오답 유형 분석 — 어떤 유형을 자주 틀리는지 -->
+    <select id="findWrongAnswerAnalysis" resultType="com.ftrader.mypage.dto.WrongAnswerTypeAnalysis">
+        SELECT q.quiz_type,
+               CASE q.quiz_type
+                   WHEN 1 THEN '호재/악재 판단'
+                   WHEN 2 THEN '섹터/밸류체인 파악'
+                   WHEN 3 THEN '용어 퀴즈'
+                   WHEN 4 THEN '연쇄 문제'
+               END AS quiz_type_name,
+               COUNT(*) AS wrong_count
+        FROM quiz_result qr
+        JOIN quiz q ON qr.quiz_id = q.quiz_id
+        WHERE qr.user_id   = #{userId}
+          AND qr.is_correct = FALSE
+        GROUP BY q.quiz_type
+        ORDER BY wrong_count DESC
+    </select>
+
+    <!-- ── 나만의 문제집 ─────────────────────────────────────── -->
+
+    <select id="findSavedQuizzes" resultType="com.ftrader.mypage.dto.SavedQuizItem">
+        SELECT usq.saved_quiz_id,
+               q.quiz_id,
+               q.quiz_type,
+               q.difficulty,
+               s.name   AS sector_name,
+               q.question,
+               usq.memo,
+               usq.saved_at
+        FROM user_saved_quiz usq
+        JOIN quiz   q ON usq.quiz_id   = q.quiz_id
+        JOIN sector s ON q.sector_id   = s.sector_id
+        WHERE usq.user_id = #{userId}
+        ORDER BY usq.saved_at DESC
+    </select>
+
+</mapper>

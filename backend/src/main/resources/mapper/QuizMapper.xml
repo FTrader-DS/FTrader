@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ftrader.quiz.QuizMapper">
+
+    <!-- ── 오늘의 퀴즈 ──────────────────────────────────────── -->
+
+    <!-- 안 푼 단일 문제 (유형 1·2·3) 랜덤 N개 -->
+    <select id="findUnsolvedSingles" resultType="com.ftrader.quiz.dto.TodayQuizItem">
+        SELECT q.quiz_id,
+               q.quiz_type,
+               q.difficulty,
+               s.name AS sector_name,
+               'SINGLE' AS item_type
+        FROM quiz q
+        JOIN sector s ON q.sector_id = s.sector_id
+        WHERE q.is_active = TRUE
+          AND q.quiz_type IN (1, 2, 3)
+          AND q.quiz_id NOT IN (
+              SELECT quiz_id FROM quiz_result WHERE user_id = #{userId}
+          )
+        ORDER BY RAND()
+        LIMIT #{limit}
+    </select>
+
+    <!-- 안 푼 연쇄 문제 세트 (유형 4) — 세트 내 문제를 하나라도 푼 적 없는 것만 -->
+    <select id="findUnsolvedSets" resultType="com.ftrader.quiz.dto.TodayQuizItem">
+        SELECT qs.set_id,
+               s.name   AS sector_name,
+               COUNT(qsi.item_id) AS question_count,
+               'SET'    AS item_type,
+               4        AS quiz_type
+        FROM quiz_set qs
+        JOIN sector s ON qs.sector_id = s.sector_id
+        JOIN quiz_set_item qsi ON qs.set_id = qsi.set_id
+        WHERE qs.is_active = TRUE
+          AND qs.set_id NOT IN (
+              SELECT DISTINCT qsi2.set_id
+              FROM quiz_set_item qsi2
+              JOIN quiz_result qr ON qsi2.quiz_id = qr.quiz_id
+              WHERE qr.user_id = #{userId}
+          )
+        GROUP BY qs.set_id, s.name
+        ORDER BY RAND()
+        LIMIT #{limit}
+    </select>
+
+    <!-- ── 단일 퀴즈 ─────────────────────────────────────────── -->
+
+    <select id="findById" resultType="com.ftrader.quiz.Quiz">
+        SELECT q.quiz_id,
+               q.sector_id,
+               q.quiz_type,
+               q.difficulty,
+               q.news_content,
+               q.question,
+               q.explanation,
+               q.is_active,
+               s.name AS sector_name
+        FROM quiz q
+        JOIN sector s ON q.sector_id = s.sector_id
+        WHERE q.quiz_id = #{quizId}
+    </select>
+
+    <select id="findChoicesByQuizId" resultType="com.ftrader.quiz.QuizChoice">
+        SELECT choice_id, quiz_id, choice_no, content, is_correct
+        FROM quiz_choice
+        WHERE quiz_id = #{quizId}
+        ORDER BY choice_no
+    </select>
+
+    <!-- ── 연쇄 퀴즈 세트 ────────────────────────────────────── -->
+
+    <select id="findSetById" resultType="com.ftrader.quiz.QuizSet">
+        SELECT qs.set_id,
+               qs.sector_id,
+               qs.title,
+               qs.news_content,
+               qs.is_active,
+               s.name AS sector_name
+        FROM quiz_set qs
+        JOIN sector s ON qs.sector_id = s.sector_id
+        WHERE qs.set_id = #{setId}
+    </select>
+
+    <!-- 세트 내 문제를 item_order 순서대로 반환 -->
+    <select id="findQuizzesBySetId" resultType="com.ftrader.quiz.Quiz">
+        SELECT q.quiz_id,
+               q.sector_id,
+               q.quiz_type,
+               q.difficulty,
+               q.news_content,
+               q.question,
+               q.explanation
+        FROM quiz_set_item qsi
+        JOIN quiz q ON qsi.quiz_id = q.quiz_id
+        WHERE qsi.set_id = #{setId}
+        ORDER BY qsi.item_order
+    </select>
+
+    <!-- ── 답안 제출 ──────────────────────────────────────────── -->
+
+    <select id="existsResult" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM quiz_result
+        WHERE user_id = #{userId}
+          AND quiz_id  = #{quizId}
+    </select>
+
+    <select id="findCorrectChoiceId" resultType="long">
+        SELECT choice_id
+        FROM quiz_choice
+        WHERE quiz_id   = #{quizId}
+          AND is_correct = TRUE
+        LIMIT 1
+    </select>
+
+    <insert id="insertResult">
+        INSERT INTO quiz_result (user_id, quiz_id, selected_choice_id, is_correct)
+        VALUES (#{userId}, #{quizId}, #{choiceId}, #{isCorrect})
+    </insert>
+
+    <!-- ── 포인트 & 레벨 ──────────────────────────────────────── -->
+
+    <!-- 포인트 누적 + 레벨 자동 갱신 -->
+    <!-- 개미(1): 0~99 / 주린이(2): 100~499 / 투자자(3): 500~1999 / 고수(4): 2000+ -->
+    <update id="addPoints">
+        UPDATE user_level
+        SET points = points + #{points},
+            level  = CASE
+                         WHEN points + #{points} >= 2000 THEN 4
+                         WHEN points + #{points} >= 500  THEN 3
+                         WHEN points + #{points} >= 100  THEN 2
+                         ELSE 1
+                     END
+        WHERE user_id = #{userId}
+    </update>
+
+    <select id="findTotalPoints" resultType="int">
+        SELECT points FROM user_level WHERE user_id = #{userId}
+    </select>
+
+    <!-- ── 북마크 ─────────────────────────────────────────────── -->
+
+    <select id="existsBookmark" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM user_saved_quiz
+        WHERE user_id = #{userId}
+          AND quiz_id  = #{quizId}
+    </select>
+
+    <insert id="insertBookmark">
+        INSERT INTO user_saved_quiz (user_id, quiz_id)
+        VALUES (#{userId}, #{quizId})
+    </insert>
+
+    <delete id="deleteBookmark">
+        DELETE FROM user_saved_quiz
+        WHERE user_id = #{userId}
+          AND quiz_id  = #{quizId}
+    </delete>
+
+    <!-- ── 용어 탐색 ──────────────────────────────────────────── -->
+    <!-- 긴 용어 우선 매칭 (짧은 용어가 긴 용어의 일부를 잘못 하이라이트하는 것 방지) -->
+    <select id="findVocabTermsInText" resultType="com.ftrader.quiz.dto.VocabTermRef">
+        SELECT vocab_id, term
+        FROM vocabulary
+        WHERE #{text} LIKE CONCAT('%', term, '%')
+        ORDER BY LENGTH(term) DESC
+    </select>
+
+</mapper>

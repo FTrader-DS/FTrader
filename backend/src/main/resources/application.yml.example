@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/ftrader?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: your_password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.ftrader
+
+jwt:
+  secret: your-256-bit-secret-key-here-must-be-long-enough
+  access-token-validity-ms: 604800000   # 7일
+
+kakao:
+  client-id: your_kakao_rest_api_key
+  client-secret: your_kakao_client_secret   # 카카오 콘솔 > 보안 탭, 비활성화 시 빈 값
+  redirect-uri: http://localhost:5173/oauth/kakao

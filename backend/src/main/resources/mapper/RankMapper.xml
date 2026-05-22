@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ftrader.rank.RankMapper">
+
+    <!--
+        주간 랭킹: 이번 주(월~일) quiz_result 기준 포인트 합산
+        정답 10점 / 오답 2점
+    -->
+    <select id="findWeeklyRank" resultType="com.ftrader.rank.dto.RankItem">
+        SELECT ROW_NUMBER() OVER (ORDER BY COALESCE(wp.weekly_points, 0) DESC) AS ranking,
+               u.user_id,
+               u.nickname,
+               u.profile_img,
+               ul.level,
+               COALESCE(wp.weekly_points, 0) AS weekly_points
+        FROM users u
+        JOIN user_level ul ON u.user_id = ul.user_id
+        LEFT JOIN (
+            SELECT user_id,
+                   SUM(CASE WHEN is_correct = TRUE THEN 10 ELSE 2 END) AS weekly_points
+            FROM quiz_result
+            WHERE YEARWEEK(solved_at, 1) = YEARWEEK(NOW(), 1)
+            GROUP BY user_id
+        ) wp ON u.user_id = wp.user_id
+        WHERE COALESCE(wp.weekly_points, 0) > 0
+        ORDER BY weekly_points DESC
+        LIMIT 20
+    </select>
+
+</mapper>

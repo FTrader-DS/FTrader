@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ftrader.vocabulary.VocabularyMapper">
+
+    <select id="findByTerm" resultType="com.ftrader.vocabulary.Vocabulary">
+        SELECT vocab_id, term, definition, example, category, sector_id
+        FROM vocabulary
+        WHERE term = #{term}
+    </select>
+
+    <!-- 내 단어장 — 저장 최신순 -->
+    <select id="findUserVocabularies" resultType="com.ftrader.vocabulary.dto.UserVocabResponse">
+        SELECT uv.user_vocab_id,
+               v.vocab_id,
+               v.term,
+               v.definition,
+               v.example,
+               v.category,
+               uv.saved_at
+        FROM user_vocabulary uv
+        JOIN vocabulary v ON uv.vocab_id = v.vocab_id
+        WHERE uv.user_id = #{userId}
+        ORDER BY uv.saved_at DESC
+    </select>
+
+    <select id="existsUserVocab" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM user_vocabulary
+        WHERE user_id = #{userId}
+          AND vocab_id = #{vocabId}
+    </select>
+
+    <insert id="insertUserVocab">
+        INSERT INTO user_vocabulary (user_id, vocab_id)
+        VALUES (#{userId}, #{vocabId})
+    </insert>
+
+    <!-- user_id 조건 추가 — 본인 데이터만 삭제 가능 -->
+    <delete id="deleteUserVocab">
+        DELETE FROM user_vocabulary
+        WHERE user_vocab_id = #{userVocabId}
+          AND user_id       = #{userId}
+    </delete>
+
+</mapper>

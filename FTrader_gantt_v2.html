@@ -1,0 +1,89 @@
+
+<style>
+.gc{font-size:13px;color:var(--color-text-primary);padding:0 0 1rem}
+.gh{display:grid;grid-template-columns:196px 1fr;gap:0;border-bottom:1px solid var(--color-border-tertiary);padding-bottom:6px;margin-bottom:4px}
+.gh-label{font-size:12px;font-weight:500;color:var(--color-text-secondary)}
+.week-headers{display:grid;grid-template-columns:repeat(4,1fr)}
+.wh{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-align:center}
+.row{display:grid;grid-template-columns:196px 1fr;align-items:center;min-height:30px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.row:last-child{border-bottom:none}
+.row.sh{background:var(--color-background-secondary);min-height:26px}
+.tn{font-size:11.5px;color:var(--color-text-primary);padding:3px 6px 3px 10px;line-height:1.4}
+.tn.s{font-size:10.5px;font-weight:500;color:var(--color-text-secondary);padding-left:6px;text-transform:uppercase;letter-spacing:.04em}
+.tn.i{padding-left:18px}
+.tn.new{color:var(--color-text-success)}
+.ba{position:relative;height:100%;display:flex;align-items:center;padding:3px 0}
+.bar{position:absolute;height:13px;border-radius:3px}
+.c1{background:#3B8BD4;opacity:.85}
+.c2{background:#1D9E75;opacity:.85}
+.c3{background:#BA7517;opacity:.9}
+.c4{background:#9B59B6;opacity:.82}
+.c5{background:#E24B4A;opacity:.85}
+.wg{position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,1fr);pointer-events:none}
+.wl{border-right:0.5px dashed var(--color-border-tertiary)}
+.ms{position:absolute;top:50%;transform:translateY(-50%);width:9px;height:9px;background:#E24B4A;border-radius:50%;border:2px solid var(--color-background-primary)}
+.new-tag{font-size:9px;background:var(--color-background-success);color:var(--color-text-success);border-radius:3px;padding:0 3px;margin-left:3px;vertical-align:middle}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;padding-top:8px;border-top:0.5px solid var(--color-border-tertiary)}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--color-text-secondary)}
+.ld{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+</style>
+<div class="gc">
+<div class="gh">
+  <div class="gh-label">작업 항목</div>
+  <div class="week-headers">
+    <div class="wh">Week 1</div><div class="wh">Week 2</div><div class="wh">Week 3</div><div class="wh">Week 4</div>
+  </div>
+</div>
+
+<!-- 기획/설계 -->
+<div class="row sh"><div class="tn s">기획 · 설계</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div></div></div>
+<div class="row"><div class="tn i">요구사항 정의</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c1" style="left:1%;width:7%"></div></div></div>
+<div class="row"><div class="tn i">DB 설계 (단어장 테이블 포함)</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c1" style="left:2%;width:14%"></div></div></div>
+<div class="row"><div class="tn i">API 명세 (단어장/오답노트 포함)</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c1" style="left:13%;width:8%"></div></div></div>
+<div class="row"><div class="tn i">UI/UX 설계 (단어장/오답노트 화면)</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c2" style="left:14%;width:9%"></div></div></div>
+<div class="row"><div class="tn i">환경 세팅</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c1" style="left:19%;width:6%"></div></div></div>
+
+<!-- 백엔드 -->
+<div class="row sh"><div class="tn s">백엔드 (A)</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div></div></div>
+<div class="row"><div class="tn i">카카오 OAuth / JWT</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c1" style="left:25%;width:11%"></div></div></div>
+<div class="row"><div class="tn i">퀴즈 기본형 API (유형1·2)</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c1" style="left:32%;width:20%"></div></div></div>
+<div class="row"><div class="tn i">연쇄 문제 API (유형4) <span class="new-tag">NEW</span></div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c1" style="left:48%;width:12%"></div></div></div>
+<div class="row"><div class="tn i">단어장 API <span class="new-tag">NEW</span></div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c1" style="left:50%;width:12%"></div></div></div>
+<div class="row"><div class="tn i">나만의 문제집 API <span class="new-tag">NEW</span></div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c1" style="left:60%;width:9%"></div></div></div>
+<div class="row"><div class="tn i">오답노트 API <span class="new-tag">NEW</span></div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c1" style="left:62%;width:10%"></div></div></div>
+<div class="row"><div class="tn i">사용자 / 레벨 / 랭킹 API</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c1" style="left:68%;width:10%"></div></div></div>
+<div class="row"><div class="tn i">외부 API 연동 (KIS / DART)</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c1" style="left:70%;width:13%"></div></div></div>
+
+<!-- 프론트엔드 -->
+<div class="row sh"><div class="tn s">프론트엔드 (B)</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div></div></div>
+<div class="row"><div class="tn i">공통 컴포넌트</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c2" style="left:25%;width:10%"></div></div></div>
+<div class="row"><div class="tn i">퀴즈 화면 (유형1·2)</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c2" style="left:32%;width:18%"></div></div></div>
+<div class="row"><div class="tn i">연쇄 문제 화면 (유형4) <span class="new-tag">NEW</span></div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c2" style="left:48%;width:12%"></div></div></div>
+<div class="row"><div class="tn i">결과 / 해설 화면 (차트)</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c2" style="left:50%;width:12%"></div></div></div>
+<div class="row"><div class="tn i">용어 팝업 컴포넌트 <span class="new-tag">NEW</span></div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c2" style="left:55%;width:10%"></div></div></div>
+<div class="row"><div class="tn i">단어장 화면 <span class="new-tag">NEW</span></div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c2" style="left:62%;width:12%"></div></div></div>
+<div class="row"><div class="tn i">나만의 문제집 화면 <span class="new-tag">NEW</span></div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c2" style="left:70%;width:10%"></div></div></div>
+<div class="row"><div class="tn i">오답노트 화면 <span class="new-tag">NEW</span></div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c2" style="left:72%;width:12%"></div></div></div>
+<div class="row"><div class="tn i">랭킹 / 마이페이지</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c2" style="left:78%;width:8%"></div></div></div>
+
+<!-- 콘텐츠 -->
+<div class="row sh"><div class="tn s">콘텐츠 (A)</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div></div></div>
+<div class="row"><div class="tn i">문제 큐레이션 (30문제, 유형1·2·3)</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c3" style="left:50%;width:22%"></div></div></div>
+<div class="row"><div class="tn i">연쇄 문제 세트 5개 <span class="new-tag">NEW</span></div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c3" style="left:58%;width:16%"></div></div></div>
+<div class="row"><div class="tn i">해설 작성</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c3" style="left:68%;width:14%"></div></div></div>
+<div class="row"><div class="tn i">용어 50개 정의 작성 <span class="new-tag">NEW</span></div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c3" style="left:60%;width:24%"></div></div></div>
+
+<!-- 테스트/배포 -->
+<div class="row sh"><div class="tn s">테스트 · 배포</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div></div></div>
+<div class="row"><div class="tn i">기능 테스트 / 버그 수정</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c5" style="left:76%;width:12%"></div></div></div>
+<div class="row"><div class="tn i">통합 테스트</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c5" style="left:86%;width:7%"></div></div></div>
+<div class="row"><div class="tn i">AWS 배포 + 데이터 입력</div><div class="ba" style="position:relative"><div class="wg"><div class="wl"></div><div class="wl"></div><div class="wl"></div><div class="wl"></div></div><div class="bar c5" style="left:88%;width:10%"></div><div class="ms" style="left:97%"></div></div></div>
+
+<div class="legend">
+  <div class="leg"><div class="ld" style="background:#3B8BD4"></div>기획/설계·백엔드 (A)</div>
+  <div class="leg"><div class="ld" style="background:#1D9E75"></div>프론트엔드 (B)</div>
+  <div class="leg"><div class="ld" style="background:#BA7517"></div>콘텐츠 (A)</div>
+  <div class="leg"><div class="ld" style="background:#E24B4A"></div>테스트·배포</div>
+  <div class="leg"><div class="ld" style="background:#1D9E75;border-radius:2px;font-size:9px;width:auto;padding:0 4px;color:#fff" style="color:white">NEW</div>v2 신규 추가</div>
+</div>
+</div>
