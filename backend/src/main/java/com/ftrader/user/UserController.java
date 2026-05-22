@@ -14,12 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserMapper userMapper;
+    private final UserService userService;
 
     /** 내 정보 + 레벨 + 통계 */
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<UserInfoResponse>> getMe(@AuthenticationPrincipal Long userId) {
-        UserInfoResponse info = userMapper.findUserInfo(userId);
-        return ResponseEntity.ok(ApiResponse.success(info));
+        return ResponseEntity.ok(ApiResponse.success(userService.getMyInfo(userId)));
     }
 }

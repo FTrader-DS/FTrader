@@ -15,10 +15,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RankController {
 
-    private final RankMapper rankMapper;
+    private final RankService rankService;
 
+    /** 주간 랭킹 Top 20 */
     @GetMapping("/weekly")
     public ResponseEntity<ApiResponse<List<RankItem>>> getWeeklyRank() {
-        return ResponseEntity.ok(ApiResponse.success(rankMapper.findWeeklyRank()));
+        return ResponseEntity.ok(ApiResponse.success(rankService.getWeelkyRank()));
     }
 }
