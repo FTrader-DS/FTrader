@@ -4,6 +4,9 @@
 # Maven
 target/
 
+# Gradle (이전 빌드 시스템 잔재)
+.gradle/
+
 # IntelliJ
 .idea/
 *.iml
