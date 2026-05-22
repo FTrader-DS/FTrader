@@ -167,8 +167,8 @@ feat/기능명 ──PR──▶ develop ──테스트 완료 후 PR──▶ 
 
 ```bash
 # 1. develop 최신화 후 작업 브랜치 생성
-git checkout develop
-git pull origin develop
+git checkout dev
+git pull origin dev
 git checkout -b feat/기능명
 
 # 2. 작업 후 커밋
@@ -239,7 +239,7 @@ fix: Docker MySQL 포트 충돌 수정
 
 ### PR 생성 규칙
 
-- **base 브랜치**: 항상 `develop` (main으로 직접 PR 금지)
+- **base 브랜치**: 항상 `dev` (main으로 직접 PR 금지)
 - **제목 형식**: `[타입] 작업 내용 요약`
     - 예: `[feat] 오늘의 용어 API 추가`, `[fix] 로그인 오류 수정`
 - **PR 크기**: 하나의 PR은 하나의 기능 또는 하나의 버그 수정
